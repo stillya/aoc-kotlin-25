@@ -16,11 +16,28 @@ fun main() {
 	}
 
 	fun part2(input: List<String>): Int {
-		return -1
+		val grid: Array<Array<Char>> = input.map { it.toCharArray().toTypedArray() }.toTypedArray()
+
+		var total = 0
+
+		do {
+			var lastTotal = 0
+			for (row in grid.indices) {
+				for (col in grid[row].indices) {
+					if (grid[row][col] == ROLL && isAccessed(grid, Pair(row, col))) {
+						lastTotal++
+						grid[row][col] = '.'
+					}
+				}
+			}
+			total += lastTotal
+		} while (lastTotal > 0)
+
+		return total
 	}
 
 	println(
-		part1(
+		part2(
 			listOf(
 				"..@@.@@@@.",
 				"@@@.@.@.@@",
@@ -39,7 +56,7 @@ fun main() {
 	val input = readInput("Day04")
 
 	part1(input).println()
-//	part2(input).println()
+	part2(input).println()
 }
 
 fun isAccessed(grid: Array<Array<Char>>, idx: Pair<Int, Int>): Boolean {
