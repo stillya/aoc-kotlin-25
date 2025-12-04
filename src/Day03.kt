@@ -22,14 +22,34 @@ fun main() {
 		return sum
 	}
 
-	fun part2(input: List<String>): Int {
-		return -1
+	fun part2(input: List<String>): Long {
+		var sum = 0L
+		input.map { s -> s.map { it.digitToInt() }.toIntArray() }.map { bank ->
+			val bankSize = bank.size - 1
+			val majorArr = IntArray(12)
+			val majorLen = majorArr.size - 1
+
+			outer@ for (i in 0..bankSize) {
+				val curr = bank[i]
+				for ((idx, major) in majorArr.withIndex()) {
+					if (curr > major && majorLen - idx <= bankSize - i) {
+						majorArr[idx] = curr
+						majorArr.fill(0, idx + 1)
+						continue@outer
+					}
+				}
+			}
+
+			val voltage = majorArr.joinToString("") { it.toString() }
+			sum += voltage.toLong()
+		}
+
+		return sum
 	}
 
 	println(
-		part1(
+		part2(
 			listOf(
-				"117654321111981",
 				"987654321111111",
 				"811111111111119",
 				"234234234234278",
@@ -41,6 +61,6 @@ fun main() {
 	val input = readInput("Day03")
 
 	part1(input).println()
-//	part2(input).println()
+	part2(input).println()
 }
 
